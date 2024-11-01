@@ -57,4 +57,4 @@ function gen() {
 
 gen internal/order/ports ports order
 
-log success "openapi generate success!"
+log_success "openapi generate success!"
