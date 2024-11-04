@@ -3,6 +3,7 @@ package ports
 import (
 	context "context"
 	"github.com/falconfan123/gorder/common/genproto/orderpb"
+	"github.com/falconfan123/gorder/order/app"
 	empty "github.com/golang/protobuf/ptypes/empty"
 )
 
@@ -10,7 +11,7 @@ type GRPCServer struct {
 	//
 }
 
-func NewGRPCServer() *GRPCServer {
+func NewGRPCServer(app.Application) *GRPCServer {
 	return &GRPCServer{}
 }
 
