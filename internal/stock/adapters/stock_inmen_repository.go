@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-type MemoryOrderRepository struct {
+type MemoryStockRepository struct {
 	lock  *sync.RWMutex
 	store map[string]*orderpb.Item
 }
@@ -21,14 +21,14 @@ var stub = map[string]*orderpb.Item{
 	},
 }
 
-func NewMemoryOrderRepository() *MemoryOrderRepository {
-	return &MemoryOrderRepository{
+func NewMemoryStockRepository() *MemoryStockRepository {
+	return &MemoryStockRepository{
 		lock:  &sync.RWMutex{},
 		store: stub,
 	}
 }
 
-func (m MemoryOrderRepository) GetItems(ctx context.Context, ids []string) ([]*orderpb.Item, error) {
+func (m MemoryStockRepository) GetItems(ctx context.Context, ids []string) ([]*orderpb.Item, error) {
 	m.lock.RLock()
 	defer m.lock.RUnlock()
 	var (
