@@ -37,8 +37,8 @@ func (H HTTPServer) PostCustomerCustomerIDOrders(c *gin.Context, customerID stri
 
 func (H HTTPServer) GetCustomerCustomerIDOrdersOrderID(c *gin.Context, customerID string, orderID string) {
 	o, err := H.app.Queries.GetCustomerOrder.Handle(c, query.GetCustomerOrder{
-		CustomerID: "fake-customer-id",
-		OrderID:    "fake-ID",
+		OrderID:    orderID,
+		CustomerID: customerID,
 	})
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"err": err})

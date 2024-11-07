@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/falconfan123/gorder/common/decorator"
 	"github.com/falconfan123/gorder/common/genproto/orderpb"
+	"github.com/falconfan123/gorder/order/app/query"
 	domain "github.com/falconfan123/gorder/order/domain/order"
 	"github.com/sirupsen/logrus"
 )
@@ -23,12 +24,12 @@ type CreateOrderHandler decorator.CommandHandler[CreateOrder, *CreateOrderResult
 
 type createOrderHandler struct {
 	orderRepo domain.Repository
-	//需要查询stock
-	//stockGRPC
+	stockGRPC query.StockService
 }
 
 func NewCreateOrderHandler(
 	orderRepo domain.Repository,
+	stockGRPC query.StockService,
 	logger *logrus.Entry,
 	metricClient decorator.MetricsClient,
 ) CreateOrderHandler {

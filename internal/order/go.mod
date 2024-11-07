@@ -1,16 +1,18 @@
 module github.com/falconfan123/gorder/order
 
-go 1.22.0
+go 1.22.7
+
+toolchain go1.23.2
 
 replace github.com/falconfan123/gorder/common => ../common
 
 require (
 	github.com/falconfan123/gorder/common v0.0.0-00010101000000-000000000000
 	github.com/gin-gonic/gin v1.9.1
-	github.com/golang/protobuf v1.5.3
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/spf13/viper v1.19.0
-	google.golang.org/grpc v1.67.1
+	google.golang.org/grpc v1.68.0
+	github.com/golang/protobuf v1.5.4
 )
 
 require (
