@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/falconfan123/gorder/common/config"
+	"github.com/falconfan123/gorder/common/discovery"
 	"github.com/falconfan123/gorder/common/genproto/orderpb"
 	"github.com/falconfan123/gorder/common/server"
 	"github.com/falconfan123/gorder/order/ports"
@@ -28,6 +29,14 @@ func main() {
 	application, cleanup := service.NewApplication(ctx)
 	defer cleanup()
 	//主函数结束的时候执行cleanup
+
+	deregisterFunc, err := discovery.RegisterToConsul(ctx, serviceName)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	defer func() {
+		_ = deregisterFunc()
+	}()
 
 	//listening in a goroutine
 	go server.RunGRPCServe(serviceName, func(server *grpc.Server) {
