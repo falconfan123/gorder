@@ -25,7 +25,9 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	application := service.NewApplication(ctx)
+	application, cleanup := service.NewApplication(ctx)
+	defer cleanup()
+	//主函数结束的时候执行cleanup
 
 	//listening in a goroutine
 	go server.RunGRPCServe(serviceName, func(server *grpc.Server) {
