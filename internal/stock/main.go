@@ -5,6 +5,7 @@ import (
 	"github.com/falconfan123/gorder/common/config"
 	"github.com/falconfan123/gorder/common/discovery"
 	"github.com/falconfan123/gorder/common/genproto/stockpb"
+	"github.com/falconfan123/gorder/common/logging"
 	"github.com/falconfan123/gorder/common/server"
 	"github.com/falconfan123/gorder/stock/ports"
 	"github.com/falconfan123/gorder/stock/service"
@@ -20,6 +21,7 @@ func init() {
 }
 
 func main() {
+	logging.Init()
 	serviceName := viper.GetString("stock.service-name")
 	serverType := viper.GetString("stock.server-to-run")
 

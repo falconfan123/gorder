@@ -5,6 +5,7 @@ import (
 	"github.com/falconfan123/gorder/common/config"
 	"github.com/falconfan123/gorder/common/discovery"
 	"github.com/falconfan123/gorder/common/genproto/orderpb"
+	"github.com/falconfan123/gorder/common/logging"
 	"github.com/falconfan123/gorder/common/server"
 	"github.com/falconfan123/gorder/order/ports"
 	"github.com/falconfan123/gorder/order/service"
@@ -21,6 +22,7 @@ func init() {
 }
 
 func main() {
+	logging.Init()
 	serviceName := viper.GetString("order.service-name")
 
 	ctx, cancel := context.WithCancel(context.Background())
