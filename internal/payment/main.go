@@ -5,6 +5,7 @@ import (
 	"github.com/falconfan123/gorder/common/config"
 	"github.com/falconfan123/gorder/common/logging"
 	"github.com/falconfan123/gorder/common/server"
+	"github.com/falconfan123/gorder/payment/infrastructure/consumer"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -29,6 +30,10 @@ func main() {
 		_ = closeCh()
 		_ = ch.Close()
 	}()
+
+	//start a goroutine
+	//consume in background
+	go consumer.NewConsumer().Listen(ch)
 
 	paymentHandler := NewPaymentHandler()
 	switch serverType {
