@@ -33,12 +33,24 @@ func NewCheckIfItemsInStockHandler(
 	)
 }
 
+// TODO should be delete
+var stub = map[string]string{
+	"1": "price_1QJtUG03vhJsKPuLo6rBxH6M",
+	"2": "price_1QJtxM03vhJsKPuLKy9IaeeK",
+}
+
 func (h checkIfItemsInStockHandler) Handle(ctx context.Context, query CheckIfItemsInStock) ([]*orderpb.Item, error) {
 	var res []*orderpb.Item
 	for _, i := range query.Items {
+		//TODO: convert to get from database/stripe
+		priceId, ok := stub[i.ID]
+		if !ok {
+			priceId = stub["1"]
+		}
 		res = append(res, &orderpb.Item{
 			ID:       i.ID,
 			Quantity: i.Quantity,
+			PriceID:  priceId,
 		})
 	}
 	return res, nil

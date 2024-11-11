@@ -22,7 +22,7 @@ func NewStripeProcessor(apiKey string) *StripeProcessor {
 
 // show success page
 var (
-	successURL = "http://localhost:8282"
+	successURL = "http://localhost:8282/success"
 )
 
 func (s StripeProcessor) CreatePaymentLink(ctx context.Context, order *orderpb.Order) (string, error) {
@@ -30,7 +30,7 @@ func (s StripeProcessor) CreatePaymentLink(ctx context.Context, order *orderpb.O
 	for _, item := range order.Items {
 		items = append(items, &stripe.CheckoutSessionLineItemParams{
 			//price_1QItsA03vhJsKPuLOGdZwItM
-			Price:    stripe.String("price_1QJtUG03vhJsKPuLo6rBxH6M"),
+			Price:    stripe.String(item.PriceID),
 			Quantity: stripe.Int64(int64(item.Quantity)),
 		})
 	}
