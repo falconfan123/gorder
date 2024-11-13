@@ -50,7 +50,7 @@ func (G GRPCServer) UpdateOrder(ctx context.Context, request *orderpb.Order) (_ 
 	order, err := domain.NewOrder(request.ID, request.CustomerID, request.Status, request.PaymentLink, request.Items)
 	if err != nil {
 		err = status.Error(codes.Internal, err.Error())
-		return
+		return nil, err
 	}
 	logrus.Infof("order_grpc||order=%v", order)
 	_, err = G.app.Commands.UpdateOrder.Handle(ctx, command.UpdateOrder{
@@ -59,5 +59,5 @@ func (G GRPCServer) UpdateOrder(ctx context.Context, request *orderpb.Order) (_ 
 			return order, nil
 		},
 	})
-	return
+	return nil, err
 }

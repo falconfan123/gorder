@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"github.com/falconfan123/gorder/common/broker"
 	"github.com/falconfan123/gorder/common/config"
 	"github.com/falconfan123/gorder/common/discovery"
 	"github.com/falconfan123/gorder/common/genproto/orderpb"
 	"github.com/falconfan123/gorder/common/logging"
 	"github.com/falconfan123/gorder/common/server"
+	"github.com/falconfan123/gorder/order/infrastructure/consumer"
 	"github.com/falconfan123/gorder/order/ports"
 	"github.com/falconfan123/gorder/order/service"
 	"github.com/gin-gonic/gin"
@@ -16,6 +18,7 @@ import (
 )
 
 func init() {
+	logging.Init()
 	if err := config.NewViperConfig(); err != nil {
 		logrus.Fatal(err)
 	}
@@ -39,6 +42,19 @@ func main() {
 	defer func() {
 		_ = deregisterFunc()
 	}()
+
+	ch, closeCh := broker.Connect(
+		viper.GetString("rabbitmq.user"),
+		viper.GetString("rabbitmq.password"),
+		viper.GetString("rabbitmq.host"),
+		viper.GetString("rabbitmq.port"),
+	)
+	defer func() {
+		_ = ch.Close()
+		_ = closeCh()
+	}()
+
+	go consumer.NewConsumer(application).Listen(ch)
 
 	//listening in a goroutine
 	go server.RunGRPCServe(serviceName, func(server *grpc.Server) {

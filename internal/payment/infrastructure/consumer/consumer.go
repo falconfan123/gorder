@@ -36,14 +36,14 @@ func (c *Consumer) Listen(ch *amqp.Channel) {
 	//Continuously reading messages from msgs,  in an infinite loop
 	go func() {
 		for msg := range msgs {
-			c.handleMessage(msg, q, ch)
+			c.handleMessage(msg, q)
 		}
 	}()
 	<-forever
 
 }
 
-func (c *Consumer) handleMessage(msg amqp.Delivery, q amqp.Queue, ch *amqp.Channel) {
+func (c *Consumer) handleMessage(msg amqp.Delivery, q amqp.Queue) {
 	logrus.Infof("Payment receive a message from%s, msg = %v", q.Name, string(msg.Body))
 
 	o := &orderpb.Order{}

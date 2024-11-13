@@ -12,16 +12,15 @@ func Connect(user, password, host, port string) (*amqp.Channel, func() error) {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	ch, err := conn.Channel() //通过该连接打开一个 AMQP 频道
+	ch, err := conn.Channel()
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	//声明Exchange
 	err = ch.ExchangeDeclare(EventOrderCreated, "direct", true, false, false, false, nil)
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	err = ch.ExchangeDeclare(EventOrderPaid, "direct", true, false, false, false, nil)
+	err = ch.ExchangeDeclare(EventOrderPaid, "fanout", true, false, false, false, nil)
 	if err != nil {
 		logrus.Fatal(err)
 	}

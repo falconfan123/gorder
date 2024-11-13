@@ -35,15 +35,15 @@ func main() {
 		viper.GetString("rabbitmq.port"),
 	)
 	defer func() {
-		_ = closeCh()
 		_ = ch.Close()
+		_ = closeCh()
 	}()
 
 	//start a goroutine
 	//consume in background
 	go consumer.NewConsumer(application).Listen(ch)
 
-	paymentHandler := NewPaymentHandler()
+	paymentHandler := NewPaymentHandler(ch)
 	switch serverType {
 	case "http":
 		server.RunHTTPServer(viper.GetString("payment.service-name"), paymentHandler.RegisterRoutes)

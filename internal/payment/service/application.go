@@ -27,12 +27,12 @@ func NewApplication(ctx context.Context) (app.Application, func()) {
 }
 
 // rely on interface
-func newApplication(ctx context.Context, orderGRPC command.OrderService, processor domain.Processor) app.Application {
+func newApplication(_ context.Context, orderGRPC command.OrderService, processor domain.Processor) app.Application {
 	logger := logrus.NewEntry(logrus.StandardLogger())
-	metricsClient := metrics.TodoMetrics{}
+	metricClient := metrics.TodoMetrics{}
 	return app.Application{
 		Commands: app.Commands{
-			CreatePayment: command.NewCreatePaymentHandler(processor, orderGRPC, logger, metricsClient),
+			CreatePayment: command.NewCreatePaymentHandler(processor, orderGRPC, logger, metricClient),
 		},
 	}
 }
