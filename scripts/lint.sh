@@ -18,7 +18,7 @@ function install_if_not_exist() {
 
 install_if_not_exist go-cleanarch github.com/roblaszczak/go-cleanarch@latest
 
-readonly LINT_VERSION="1.54.0"
+readonly LINT_VERSION="1.60.1"
 NEED_INSTALL=false
 if command -v golangci-lint >/dev/null 2>&1; then
   # golangci-lint has version 1.54.0 built with go1.21.0 from c1d8c565 on 2023-08-09T11:50:00Z
@@ -34,7 +34,7 @@ else
 fi
 
 if [ "$NEED_INSTALL" == true ]; then
-  run curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.0
+  run curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.1
 fi
 
 run go-cleanarch

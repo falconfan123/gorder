@@ -2,6 +2,9 @@ package consumer
 
 import (
 	"context"
+	"fmt"
+	"go.opentelemetry.io/otel"
+
 	"github.com/falconfan123/gorder/common/broker"
 	"github.com/falconfan123/gorder/common/genproto/orderpb"
 	"github.com/falconfan123/gorder/payment/app"
@@ -45,6 +48,10 @@ func (c *Consumer) Listen(ch *amqp.Channel) {
 
 func (c *Consumer) handleMessage(msg amqp.Delivery, q amqp.Queue) {
 	logrus.Infof("Payment receive a message from%s, msg = %v", q.Name, string(msg.Body))
+	ctx := broker.ExtractRabbitMQHeaders(context.Background(), msg.Headers)
+	tr := otel.Tracer("rabbitmq")
+	_, span := tr.Start(ctx, fmt.Sprintf("rabbitmq.%s.consume", q.Name))
+	defer span.End()
 
 	o := &orderpb.Order{}
 	if err := json.Unmarshal(msg.Body, o); err != nil {
@@ -52,12 +59,14 @@ func (c *Consumer) handleMessage(msg amqp.Delivery, q amqp.Queue) {
 		_ = msg.Nack(false, false)
 		return
 	}
-	if _, err := c.app.Commands.CreatePayment.Handle(context.TODO(), command.CreatePayment{Order: o}); err != nil {
+	if _, err := c.app.Commands.CreatePayment.Handle(ctx, command.CreatePayment{Order: o}); err != nil {
 		//TODO: retry
 		logrus.Infof("fail to create order, err=%v", err)
 		_ = msg.Nack(false, false)
 		return
 	}
+
+	span.AddEvent("payment.created")
 	//create payment link
 	_ = msg.Ack(false)
 	logrus.Info("consume success")

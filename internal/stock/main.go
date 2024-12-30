@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"github.com/falconfan123/gorder/common/tracing"
+
 	"github.com/falconfan123/gorder/common/config"
 	"github.com/falconfan123/gorder/common/discovery"
 	"github.com/falconfan123/gorder/common/genproto/stockpb"
@@ -22,14 +24,17 @@ func init() {
 }
 
 func main() {
-	logging.Init()
 	serviceName := viper.GetString("stock.service-name")
 	serverType := viper.GetString("stock.server-to-run")
 
-	logrus.Info(serverType)
-
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
+	shutdown, err := tracing.InitJaegerProvider(viper.GetString("jaeger.url"), serviceName)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	defer shutdown(ctx)
 
 	application := service.NewApplication(ctx)
 

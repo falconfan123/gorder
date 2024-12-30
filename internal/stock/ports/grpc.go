@@ -2,6 +2,8 @@ package ports
 
 import (
 	context "context"
+	"github.com/falconfan123/gorder/common/tracing"
+
 	"github.com/falconfan123/gorder/common/genproto/stockpb"
 	"github.com/falconfan123/gorder/stock/app"
 	"github.com/falconfan123/gorder/stock/app/query"
@@ -25,6 +27,9 @@ func (G GRPCServer) GetItems(ctx context.Context, request *stockpb.GetItemsReque
 }
 
 func (G GRPCServer) CheckIfItemsInStock(ctx context.Context, request *stockpb.CheckIfItemsInStockRequest) (*stockpb.CheckIfItemsInStockResponse, error) {
+	_, span := tracing.Start(ctx, "CheckIfItemsInStock")
+	defer span.End()
+	
 	items, err := G.app.Queries.CheckIfItemsInStock.Handle(ctx, query.CheckIfItemsInStock{Items: request.Items})
 	if err != nil {
 		return nil, err

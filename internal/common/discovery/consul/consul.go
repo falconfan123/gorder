@@ -3,12 +3,13 @@ package consul
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/consul/api"
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/hashicorp/consul/api"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 type Registry struct {

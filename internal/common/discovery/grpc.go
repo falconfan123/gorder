@@ -3,10 +3,11 @@ package discovery
 import (
 	"context"
 	"fmt"
+	"math/rand"
+
 	"github.com/falconfan123/gorder/common/discovery/consul"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"math/rand"
 )
 
 // 返回cleanup函数和error

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/falconfan123/gorder/common/metrics"
 	"github.com/falconfan123/gorder/stock/adapters"
 	"github.com/falconfan123/gorder/stock/app"
