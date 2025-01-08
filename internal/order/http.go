@@ -17,11 +17,6 @@ type HTTPServer struct {
 	app app.Application
 }
 
-func (H HTTPServer) GetCustomerCustomerIdOrdersOrderId(c *gin.Context, customerId string, orderId string) {
-	//TODO implement me
-	panic("implement me")
-}
-
 func (H HTTPServer) PostCustomerCustomerIdOrders(c *gin.Context, customerId string) {
 	//ctx, span := tracing.Start(c, "PostCustomerCustomerIDOrders")
 	//defer span.End()
@@ -52,7 +47,7 @@ func (H HTTPServer) PostCustomerCustomerIdOrders(c *gin.Context, customerId stri
 	}
 }
 
-func (H HTTPServer) GetCustomerCustomerIDOrdersOrderID(c *gin.Context, customerID string, orderID string) {
+func (H HTTPServer) GetCustomerCustomerIdOrdersOrderId(c *gin.Context, customerID string, orderID string) {
 	var (
 		err  error
 		resp interface{}
@@ -60,13 +55,14 @@ func (H HTTPServer) GetCustomerCustomerIDOrdersOrderID(c *gin.Context, customerI
 	defer func() {
 		H.Response(c, err, resp)
 	}()
+
 	o, err := H.app.Queries.GetCustomerOrder.Handle(c.Request.Context(), query.GetCustomerOrder{
 		OrderID:    orderID,
 		CustomerID: customerID,
 	})
-	//between app and http =====> dto
 	if err != nil {
 		return
 	}
+
 	resp = convertor.NewOrderConvertor().EntityToClient(o)
 }

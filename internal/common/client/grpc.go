@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"errors"
-	"fmt"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"net"
 	"time"
@@ -22,9 +21,7 @@ func NewStockGRPCClient(ctx context.Context) (client stockpb.StockServiceClient,
 	if !WaitForStockGRPCClient(viper.GetDuration("dial-grpc-timeout") * time.Second) {
 		return nil, nil, errors.New("stock grpc not available")
 	}
-	fmt.Print("here1")
 	grpcAddr, err := discovery.GetServiceAddr(ctx, viper.GetString("stock.service-name"))
-	fmt.Print("here2")
 	if err != nil {
 		return nil, func() error { return nil }, err
 	}
