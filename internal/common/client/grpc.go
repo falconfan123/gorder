@@ -40,7 +40,7 @@ func NewOrderGRPCClient(ctx context.Context) (client orderpb.OrderServiceClient,
 	if !WaitForOrderGRPCClient(viper.GetDuration("dial-grpc-timeout") * time.Second) {
 		return nil, nil, errors.New("order grpc not available")
 	}
-	grpcAddr, err := discovery.GetServiceAddr(ctx, viper.GetString("order.service-name"))
+	grpcAddr, err := discovery.GetServiceAddr(ctx, viper.GetString("order.service-name")) //尝试去服务发现里获取order-service
 	if err != nil {
 		return nil, func() error { return nil }, err
 	}
@@ -74,6 +74,7 @@ func WaitForStockGRPCClient(timeout time.Duration) bool {
 }
 
 // 传入IP地址，传入timeout时间,返回端口是否可用
+// 检查指定地址和端口（addr）是否在指定超时时间（timeout）内变得可用 这个在ETCD里也有
 func waitFor(addr string, timeout time.Duration) bool {
 	portAvailable := make(chan struct{})
 	timeoutCh := time.After(timeout)

@@ -15,7 +15,7 @@ import (
 )
 
 func NewApplication(ctx context.Context) (app.Application, func()) {
-	orderClient, closeOrderClient, err := grpcClient.NewOrderGRPCClient(ctx)
+	orderClient, closeOrderClient, err := grpcClient.NewOrderGRPCClient(ctx) //尝试去New GRPC客户端
 	if err != nil {
 		panic(err)
 	}

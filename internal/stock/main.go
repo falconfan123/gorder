@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/falconfan123/gorder/common/tracing"
 
-	"github.com/falconfan123/gorder/common/config"
+	_ "github.com/falconfan123/gorder/common/config"
 	"github.com/falconfan123/gorder/common/discovery"
 	"github.com/falconfan123/gorder/common/genproto/stockpb"
 	"github.com/falconfan123/gorder/common/logging"
@@ -18,9 +18,6 @@ import (
 
 func init() {
 	logging.Init()
-	if err := config.NewViperConfig(); err != nil {
-		logrus.Fatal(err)
-	}
 }
 
 func main() {
