@@ -7,7 +7,7 @@ servers:
   - url: 'https://{hostname}/api'
     variables:
       hostname:
-        default: 127.0.0.1
+        default: 0.0.0.1
 
 paths:
   /customer/{customer_id}/orders/{order_id}:

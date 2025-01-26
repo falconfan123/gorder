@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 
 	"github.com/spf13/viper"
 )
@@ -16,7 +17,16 @@ func init() {
 	}
 }
 
-func NewViperConfig() error {
+var once sync.Once
+
+func NewViperConfig() (err error) {
+	once.Do(func() {
+		err = newViperConfig()
+	})
+	return
+}
+
+func newViperConfig() error {
 	relPath, err := GetRelativePathFromCaller()
 	if err != nil {
 		return err
